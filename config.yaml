@@ -1,0 +1,54 @@
+# AtlasLens starter configuration. Paths are relative to the project folder.
+data_dir: data
+results_dir: results
+
+region:
+  name: hippocampus
+  tenx_dataset_dir: WMB-10Xv3          # Allen 10x chemistry package
+  tenx_feature_matrix: WMB-10Xv3-HPF   # hippocampal-formation dissection
+  parcellation_division: HPF           # Allen CCF division used to select MERFISH cells
+
+scrna:
+  n_cells: 60000        # cells subsampled from the region matrix (null = all; needs >32 GB RAM)
+  min_cells_per_subclass: 200   # rare subclasses are kept whole up to this size
+  n_hvg: 3000
+  n_pcs: 50
+  leiden_resolution: 1.0
+  seed: 0
+  markers:              # canonical genes for the dot plot (missing genes are skipped)
+    excitatory: [Slc17a7, Neurod6]
+    DG_granule: [Prox1, C1ql2]
+    CA1: [Fibcd1, Wfs1]
+    CA2: [Amigo2, Rgs14]
+    CA3: [Cdh24, Grik4]
+    inhibitory: [Gad1, Gad2, Pvalb, Sst, Vip, Lamp5]
+    astrocyte: [Aqp4, Gfap, Slc1a3]
+    oligodendrocyte: [Mog, Mbp, Plp1]
+    OPC: [Pdgfra, Cspg4]
+    microglia: [Cx3cr1, P2ry12]
+    endothelial: [Cldn5, Flt1]
+
+merfish:
+  dataset_dir: MERFISH-C57BL6J-638850
+  matrix: C57BL6J-638850/log2
+  # all eight are in the 500-gene panel (checked against the atlas gene table, release 20261130)
+  genes_to_plot: [Slc17a7, Gad2, Pvalb, Vip, Lamp5, Calb1, Aqp4, Mog]
+
+imaging:
+  sample: V1_Adult_Mouse_Brain_Coronal_Section_2   # 10x Visium IF: DAPI / NeuN / GFAP
+  base_url: https://cf.10xgenomics.com/samples/spatial-exp/1.1.0
+  channels: {DAPI: 0, NeuN: 1, GFAP: 2}   # GFAP channel also contains the Visium fiducial frame
+  roi: auto            # auto = densest-DAPI window; or [x0, y0, width, height] in full-res pixels
+  roi_size: 2048
+  segmentation: auto   # auto = cellpose if installed, else classical; or "cellpose" / "classical"
+  nucleus_diameter_px: null   # null = estimated; set it once you know the pixel size
+  ring_px: 3           # perinuclear ring width used for cytoplasmic markers
+  marker_genes: {NeuN: Rbfox3, GFAP: Gfap}   # antibody -> gene used to look the marker up in scRNA-seq
+  structure: null      # Allen CCF structure the ROI shows, e.g. DG, CA1, CA3 (null = the agent asks)
+
+agent:
+  # Any LangChain chat model, written "provider:model", for example "openai:<model>",
+  # "google_genai:<model>" or "ollama:<local model>". Install that provider's LangChain package
+  # and set its API key in the environment. Can also be given as the ATLASLENS_LLM variable.
+  llm: null
+  temperature: 0

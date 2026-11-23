@@ -1,0 +1,22 @@
+name: atlaslens
+channels: [conda-forge]
+dependencies:
+  - python=3.11
+  - pip
+  - scanpy
+  - anndata
+  - leidenalg
+  - python-igraph
+  - scikit-image
+  - tifffile
+  - imagecodecs
+  - matplotlib
+  - pandas
+  - pyyaml
+  - h5py
+  - jupyterlab
+  - scikit-learn
+  - pip:
+      - langgraph
+      - langchain
+      - langchain-openai
